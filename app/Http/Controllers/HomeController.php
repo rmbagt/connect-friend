@@ -3,29 +3,58 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Hobby;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function index(Request $request)
     {
-        $this->middleware('auth');
+        $query = User::with(['hobbies', 'wishlistedBy'])
+            ->where('is_visible', true)
+            ->where('is_active', true)
+            ->where('id', '!=', Auth::id()); // Exclude the current user
+
+        // Filter by gender
+        if ($request->has('gender')) {
+            $query->where('gender', $request->gender);
+        }
+
+        // Filter by hobby
+        if ($request->has('hobby')) {
+            $query->whereHas('hobbies', function ($q) use ($request) {
+                $q->where('hobbies.id', $request->hobby);
+            });
+        }
+
+        // Search by name or hobby
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhereHas('hobbies', function ($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $users = $query->paginate(15);
+        $hobbies = Hobby::all();
+
+        return view('home', compact('users', 'hobbies'));
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+    public function toggleWishlist(User $user)
     {
-        $user = Auth::user()->load(['hobbies', 'friends', 'wallet']);
-        return view('home', compact('user'));
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $currentUser = Auth::user();
+        $currentUser->wishlist()->toggle($user->id);
+
+        return back();
     }
 }
 

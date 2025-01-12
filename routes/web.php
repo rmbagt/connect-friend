@@ -45,6 +45,9 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::get('/messages/{user}', [MessageController::class, 'show'])->name('messages.show');
     Route::post('/messages/{user}', [MessageController::class, 'store'])->name('messages.store');
 
+    // Wishlist route
+    Route::post('/wishlist/{user}', [HomeController::class, 'toggleWishlist'])->name('wishlist.toggle');
+
     // Wallet routes
     Route::get('/wallet', [WalletController::class, 'show'])->name('wallet.show');
     Route::post('/wallet/topup', [WalletController::class, 'topup'])->name('wallet.topup');

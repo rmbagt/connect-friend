@@ -27,7 +27,6 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'avatar' => 'https://i.pravatar.cc/200',
             'password' => static::$password ??= Hash::make('password'),
             'gender' => fake()->randomElement(['male', 'female']),
             'instagram_username' => 'https://www.instagram.com/' . fake()->userName(),

@@ -25,7 +25,6 @@ class UserSeeder extends Seeder
             'name' => 'RMBA GT',
             'email' => 'rmbagt@gmail.com',
             'email_verified_at' => now(),
-            'avatar' => 'https://i.pravatar.cc/200',
             'password' => Hash::make('password'),
             'gender' => 'male',
             'instagram_username' => 'https://www.instagram.com/reynaldo_marchellba',

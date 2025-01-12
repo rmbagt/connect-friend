@@ -73,4 +73,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(Wallet::class);
     }
+
+    public function wishlist()
+    {
+        return $this->belongsToMany(User::class, 'wishlists', 'user_id', 'wishlisted_user_id')->withTimestamps();
+    }
+
+    public function wishlistedBy()
+    {
+        return $this->belongsToMany(User::class, 'wishlists', 'wishlisted_user_id', 'user_id')->withTimestamps();
+    }
 }
+
