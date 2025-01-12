@@ -16,7 +16,7 @@ use App\Http\Controllers\HomeController;
 */
 
 // Home route
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Authentication Routes (added by Laravel UI)
 Auth::routes();
@@ -30,8 +30,6 @@ Route::get('/hobbies/{hobby}', [HobbyController::class, 'show'])->name('hobbies.
 // Routes that require authentication
 Route::middleware(['auth', 'web'])->group(function () {
     // User routes
-    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
@@ -55,10 +53,5 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::get('/payment', [PaymentController::class, 'show'])->name('payment.show');
     Route::post('/payment', [PaymentController::class, 'process'])->name('payment.process');
     Route::post('/payment/overpayment', [PaymentController::class, 'handleOverpayment'])->name('payment.handle-overpayment');
-
-    // Payment route (This line is now redundant and should be removed)
-    //Route::get('/payment', function () {
-    //    return view('payment.show');
-    //})->name('payment.show');
 });
 

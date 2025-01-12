@@ -50,12 +50,23 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    @if(Auth::user()->avatar)
+                                        <img src="{{ asset('storage/'.Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="rounded-circle me-2" width="32" height="32">
+                                    @else
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF" alt="{{ Auth::user()->name }}" class="rounded-circle me-2" width="32" height="32">
+                                    @endif
                                     {{ Auth::user()->name }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                    <div class="dropdown-item">
+                                        {{ __('Wallet Balance') }}: Rp {{ number_format(Auth::user()->wallet->balance, 0, ',', '.') }}
+                                    </div>
+                                    <a class="dropdown-item" href="{{ route('users.show', Auth::user()) }}">
+                                        {{ __('Profile') }}
+                                    </a>
+                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
@@ -78,3 +89,4 @@
     </div>
 </body>
 </html>
+

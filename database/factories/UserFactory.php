@@ -34,6 +34,7 @@ class UserFactory extends Factory
             'mobile_number' => fake()->phoneNumber(),
             'registration_price' => 100000 + fake()->randomNumber(4),
             'remember_token' => Str::random(10),
+            'is_active' => true,
         ];
     }
 

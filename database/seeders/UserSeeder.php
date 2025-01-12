@@ -32,6 +32,7 @@ class UserSeeder extends Seeder
             'mobile_number' => '085263728174',
             'registration_price' => 100000 + rand(0, 25000),
             'remember_token' => Str::random(10),
+            'is_active' => true,
         ]);
 
         $testUser->hobbies()->attach(

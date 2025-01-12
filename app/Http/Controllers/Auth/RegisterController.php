@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
     use RegistersUsers;
 
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/payment';
 
     public function __construct()
     {
@@ -58,10 +59,13 @@ class RegisterController extends Controller
             'mobile_number' => $data['mobile_number'],
             'registration_price' => rand(100000, 125000),
             'bio' => $data['bio'],
+            'is_active' => false,
         ]);
 
         $user->hobbies()->attach($data['hobbies']);
         $user->wallet()->create(['balance' => 0]);
+
+        Log::info('New user created: ' . $user->id . ' with is_active: ' . $user->is_active);
 
         return $user;
     }

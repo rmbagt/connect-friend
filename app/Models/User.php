@@ -21,6 +21,7 @@ class User extends Authenticatable
         'registration_price',
         'is_visible',
         'avatar',
+        'is_active',
     ];
 
     protected $hidden = [
@@ -32,6 +33,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_visible' => 'boolean',
+        'is_active' => 'boolean',
         'registration_price' => 'integer',
     ];
 
@@ -72,4 +74,3 @@ class User extends Authenticatable
         return $this->hasOne(Wallet::class);
     }
 }
-
