@@ -8,12 +8,12 @@
                 <div class="card-header">{{ __('Payment') }}</div>
 
                 <div class="card-body">
-                    <h5>Registration Fee: ${{ number_format($user->registration_price / 100, 2) }}</h5>
+                    <h5>Registration Fee: Rp {{ number_format($user->registration_price, 0, ',', '.') }}</h5>
                     <form method="POST" action="{{ route('payment.process') }}">
                         @csrf
                         <div class="mb-3">
-                            <label for="amount" class="form-label">{{ __('Enter Payment Amount') }}</label>
-                            <input type="number" class="form-control @error('amount') is-invalid @enderror" id="amount" name="amount" step="0.01" required>
+                            <label for="amount" class="form-label">{{ __('Enter Payment Amount (in Rp)') }}</label>
+                            <input type="number" class="form-control @error('amount') is-invalid @enderror" id="amount" name="amount" step="1" required>
                             @error('amount')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

@@ -32,7 +32,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_visible' => 'boolean',
-        'registration_price' => 'decimal:2',
+        'registration_price' => 'integer',
     ];
 
     public function hobbies()

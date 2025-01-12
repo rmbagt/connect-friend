@@ -16,17 +16,17 @@ class PaymentController extends Controller
     public function process(Request $request)
     {
         $user = Auth::user();
-        $amount = $request->input('amount') * 100; // Convert to cents
+        $amount = $request->input('amount');
 
         if ($amount < $user->registration_price) {
-            $underpaid = ($user->registration_price - $amount) / 100;
-            return redirect()->back()->with('warning', "You are still underpaid $" . number_format($underpaid, 2));
+            $underpaid = $user->registration_price - $amount;
+            return redirect()->back()->with('warning', "You are still underpaid Rp " . number_format($underpaid, 0, ',', '.'));
         }
 
         if ($amount > $user->registration_price) {
-            $overpaid = ($amount - $user->registration_price) / 100;
+            $overpaid = $amount - $user->registration_price;
             return redirect()->back()->with([
-                'overpayment' => "Sorry you overpaid $" . number_format($overpaid, 2) . ", would you like to enter a balance?",
+                'overpayment' => "Sorry you overpaid Rp " . number_format($overpaid, 0, ',', '.') . ", would you like to add it to your wallet balance?",
                 'overpayment_amount' => $overpaid
             ]);
         }
@@ -42,7 +42,7 @@ class PaymentController extends Controller
         $overpaymentAmount = $request->input('overpayment_amount');
 
         if ($request->input('action') === 'add_to_wallet') {
-            $user->wallet->increment('balance', $overpaymentAmount * 100);
+            $user->wallet->increment('balance', $overpaymentAmount);
             $user->update(['is_active' => true]);
             return redirect()->route('home')->with('success', 'Payment successful. Overpayment added to your wallet.');
         } else {
