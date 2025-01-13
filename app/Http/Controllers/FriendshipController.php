@@ -6,62 +6,72 @@ use App\Models\User;
 use App\Models\Friendship;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class FriendshipController extends Controller
 {
     public function index()
     {
         $user = Auth::user();
-        $friends = $user->friends()->paginate(10);
-        $pendingRequests = $user->receivedFriendRequests()->with('user')->get();
-        $sentRequests = $user->sentFriendRequests()->with('friend')->get();
-        return view('friendships.index', compact('friends', 'pendingRequests', 'sentRequests'));
+        $friends = $user->friends()->withPivot('id')->paginate(10);
+        $mutualWishlistUsers = $user->mutualWishlistUsers()
+            ->whereNotIn('users.id', $friends->pluck('id'))
+            ->get();
+
+        return view('friendships.index', compact('friends', 'mutualWishlistUsers'));
     }
 
     public function store(Request $request, User $user)
     {
         if (Auth::id() === $user->id) {
-            return redirect()->back()->with('error', __('You cannot send a friend request to yourself.'));
+            return redirect()->back()->with('error', __('You cannot add yourself as a friend.'));
         }
 
-        $existingFriendship = Friendship::where(function ($query) use ($user) {
-            $query->where('user_id', Auth::id())->where('friend_id', $user->id);
-        })->orWhere(function ($query) use ($user) {
-            $query->where('user_id', $user->id)->where('friend_id', Auth::id());
-        })->first();
-
-        if ($existingFriendship) {
-            return redirect()->back()->with('error', __('A friend request already exists.'));
+        if (Auth::user()->isFriendWith($user)) {
+            return redirect()->back()->with('error', __('You are already friends with this user.'));
         }
 
-        Friendship::create([
-            'user_id' => Auth::id(),
-            'friend_id' => $user->id,
-        ]);
-
-        return redirect()->back()->with('success', __('Friend request sent.'));
-    }
-
-    public function update(Friendship $friendship)
-    {
-        if ($friendship->friend_id !== Auth::id()) {
-            return redirect()->back()->with('error', __('You are not authorized to accept this request.'));
+        if (!Auth::user()->hasMutualWishlist($user)) {
+            return redirect()->back()->with('error', __('You can only add friends from your mutual wishlist.'));
         }
 
-        $friendship->update(['is_accepted' => true]);
+        DB::transaction(function () use ($user) {
+            Friendship::create([
+                'user_id' => Auth::id(),
+                'friend_id' => $user->id,
+                'is_accepted' => true,
+            ]);
 
-        return redirect()->back()->with('success', __('Friend request accepted.'));
+            Friendship::create([
+                'user_id' => $user->id,
+                'friend_id' => Auth::id(),
+                'is_accepted' => true,
+            ]);
+
+            // Remove from each other's wishlists
+            Auth::user()->wishlist()->detach($user->id);
+            $user->wishlist()->detach(Auth::id());
+        });
+
+        return redirect()->back()->with('success', __('Friend added successfully.'));
     }
 
     public function destroy(Friendship $friendship)
     {
         if ($friendship->user_id !== Auth::id() && $friendship->friend_id !== Auth::id()) {
-            return redirect()->back()->with('error', __('You are not authorized to delete this friendship.'));
+            return redirect()->back()->with('error', __('You are not authorized to remove this friendship.'));
         }
 
-        $friendship->delete();
+        DB::transaction(function () use ($friendship) {
+            // Delete the reciprocal friendship if it exists
+            Friendship::where('user_id', $friendship->friend_id)
+                      ->where('friend_id', $friendship->user_id)
+                      ->delete();
 
-        return redirect()->back()->with('success', __('Friend removed.'));
+            $friendship->delete();
+        });
+
+        return redirect()->back()->with('success', __('Friend removed successfully.'));
     }
 }
 

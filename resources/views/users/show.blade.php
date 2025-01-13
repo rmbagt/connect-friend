@@ -12,7 +12,7 @@
                         @if($user->avatar)
                             <img src="{{ asset('storage/'.$user->avatar) }}" alt="{{ $user->name }}" class="rounded-circle" width="150">
                         @else
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF" alt="{{ Auth::user()->name }}" alt="{{ $user->name }}" class="rounded-circle">
+                            <img src="https://via.placeholder.com/150" alt="{{ $user->name }}" class="rounded-circle">
                         @endif
                     </div>
 

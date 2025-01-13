@@ -21,7 +21,7 @@
                                         @endif
                                         {{ $friend->name }}
                                     </div>
-                                    <form action="{{ route('friendships.destroy', $friend->pivot) }}" method="POST">
+                                    <form action="{{ route('friendships.destroy', $friend->pivot->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">{{ __('Remove') }}</button>
@@ -34,61 +34,28 @@
                         <p>{{ __('You have no friends yet.') }}</p>
                     @endif
 
-                    <h3 class="mt-4">{{ __('Pending Friend Requests') }}</h3>
-                    @if($pendingRequests->count() > 0)
+                    <h3 class="mt-4">{{ __('Mutual Wishlist Users') }}</h3>
+                    @if($mutualWishlistUsers->count() > 0)
                         <ul class="list-group">
-                            @foreach($pendingRequests as $request)
+                            @foreach($mutualWishlistUsers as $mutualUser)
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <div>
-                                        @if($request->user->avatar)
-                                            <img src="{{ asset('storage/'.$request->user->avatar) }}" alt="{{ $request->user->name }}" class="rounded-circle me-2" width="32" height="32">
+                                        @if($mutualUser->avatar)
+                                            <img src="{{ asset('storage/'.$mutualUser->avatar) }}" alt="{{ $mutualUser->name }}" class="rounded-circle me-2" width="32" height="32">
                                         @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($request->user->name) }}&color=7F9CF5&background=EBF4FF" alt="{{ $request->user->name }}" class="rounded-circle me-2" width="32" height="32">
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($mutualUser->name) }}&color=7F9CF5&background=EBF4FF" alt="{{ $mutualUser->name }}" class="rounded-circle me-2" width="32" height="32">
                                         @endif
-                                        {{ $request->user->name }}
+                                        {{ $mutualUser->name }}
                                     </div>
-                                    <div>
-                                        <form action="{{ route('friendships.update', $request) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('PUT')
-                                            <button type="submit" class="btn btn-success btn-sm">{{ __('Accept') }}</button>
-                                        </form>
-                                        <form action="{{ route('friendships.destroy', $request) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">{{ __('Reject') }}</button>
-                                        </form>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <p>{{ __('You have no pending friend requests.') }}</p>
-                    @endif
-
-                    <h3 class="mt-4">{{ __('Sent Friend Requests') }}</h3>
-                    @if($sentRequests->count() > 0)
-                        <ul class="list-group">
-                            @foreach($sentRequests as $request)
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        @if($request->friend->avatar)
-                                            <img src="{{ asset('storage/'.$request->friend->avatar) }}" alt="{{ $request->friend->name }}" class="rounded-circle me-2" width="32" height="32">
-                                        @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($request->friend->name) }}&color=7F9CF5&background=EBF4FF" alt="{{ $request->friend->name }}" class="rounded-circle me-2" width="32" height="32">
-                                        @endif
-                                        {{ $request->friend->name }}
-                                    </div>
-                                    <form action="{{ route('friendships.destroy', $request) }}" method="POST">
+                                    <form action="{{ route('friendships.store', $mutualUser) }}" method="POST">
                                         @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-warning btn-sm">{{ __('Cancel Request') }}</button>
+                                        <button type="submit" class="btn btn-success btn-sm">{{ __('Add Friend') }}</button>
                                     </form>
                                 </li>
                             @endforeach
                         </ul>
                     @else
-                        <p>{{ __('You have no sent friend requests.') }}</p>
+                        <p>{{ __('You have no mutual wishlist users.') }}</p>
                     @endif
                 </div>
             </div>

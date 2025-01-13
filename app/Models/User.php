@@ -22,6 +22,7 @@ class User extends Authenticatable
         'is_visible',
         'avatar',
         'is_active',
+        'bio',
     ];
 
     protected $hidden = [
@@ -45,18 +46,7 @@ class User extends Authenticatable
     public function friends()
     {
         return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
-            ->wherePivot('is_accepted', true)
             ->withTimestamps();
-    }
-
-    public function sentFriendRequests()
-    {
-        return $this->hasMany(Friendship::class, 'user_id')->where('is_accepted', false);
-    }
-
-    public function receivedFriendRequests()
-    {
-        return $this->hasMany(Friendship::class, 'friend_id')->where('is_accepted', false);
     }
 
     public function sentMessages()
@@ -82,6 +72,28 @@ class User extends Authenticatable
     public function wishlistedBy()
     {
         return $this->belongsToMany(User::class, 'wishlists', 'wishlisted_user_id', 'user_id')->withTimestamps();
+    }
+
+    public function hasMutualWishlist(User $user)
+    {
+        return $this->wishlist()->where('wishlisted_user_id', $user->id)->exists() &&
+               $user->wishlist()->where('wishlisted_user_id', $this->id)->exists();
+    }
+
+    public function mutualWishlistUsers()
+    {
+        return $this->belongsToMany(User::class, 'wishlists', 'user_id', 'wishlisted_user_id')
+            ->whereIn('users.id', function ($query) {
+                $query->select('user_id')
+                    ->from('wishlists')
+                    ->where('wishlisted_user_id', $this->id);
+            });
+    }
+
+    public function isFriendWith(User $user)
+    {
+        return $this->friends()->where('friend_id', $user->id)->exists() ||
+               $user->friends()->where('friend_id', $this->id)->exists();
     }
 }
 

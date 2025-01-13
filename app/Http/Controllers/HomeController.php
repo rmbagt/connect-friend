@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Hobby;
+use App\Models\Friendship;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -33,16 +34,24 @@ class HomeController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhereHas('hobbies', function ($q) use ($search) {
-                      $q->where('name', 'like', "%{$search}%");
-                  });
+                 ->orWhereHas('hobbies', function ($q) use ($search) {
+                     $q->where('name', 'like', "%{$search}%");
+                 });
             });
         }
 
         $users = $query->paginate(15);
         $hobbies = Hobby::all();
 
-        return view('home', compact('users', 'hobbies'));
+        // Get friend status for each user
+        $friendships = Friendship::where('user_id', Auth::id())
+            ->orWhere('friend_id', Auth::id())
+            ->get()
+            ->keyBy(function ($friendship) {
+                return $friendship->user_id == Auth::id() ? $friendship->friend_id : $friendship->user_id;
+            });
+
+        return view('home', compact('users', 'hobbies', 'friendships'));
     }
 
     public function toggleWishlist(User $user)

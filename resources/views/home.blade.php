@@ -68,16 +68,29 @@
                             <i class="fas fa-heart me-2"></i>{{ $user->hobbies->pluck('name')->implode(', ') }}
                         </p>
                         @auth
-                            <form action="{{ route('wishlist.toggle', $user) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-outline-primary w-100">
-                                    @if(Auth::user()->wishlist->contains($user))
-                                        <i class="fas fa-heart-broken me-2"></i>{{ __('Remove from Wishlist') }}
-                                    @else
-                                        <i class="fas fa-heart me-2"></i>{{ __('Add to Wishlist') }}
-                                    @endif
+                            @if(Auth::user()->isFriendWith($user))
+                                <button class="btn btn-secondary w-100" disabled>
+                                    <i class="fas fa-user-check me-2"></i>{{ __('Friends') }}
                                 </button>
-                            </form>
+                            @elseif(Auth::user()->hasMutualWishlist($user))
+                                <form action="{{ route('friendships.store', $user) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-user-plus me-2"></i>{{ __('Add Friend') }}
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('wishlist.toggle', $user) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline-primary w-100">
+                                        @if(Auth::user()->wishlist->contains($user))
+                                            <i class="fas fa-heart-broken me-2"></i>{{ __('Remove from Wishlist') }}
+                                        @else
+                                            <i class="fas fa-heart me-2"></i>{{ __('Add to Wishlist') }}
+                                        @endif
+                                    </button>
+                                </form>
+                            @endif
                         @else
                             <a href="{{ route('login') }}" class="btn btn-primary w-100">
                                 <i class="fas fa-sign-in-alt me-2"></i>{{ __('Login to Interact') }}
