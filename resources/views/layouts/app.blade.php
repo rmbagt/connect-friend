@@ -79,8 +79,9 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <div class="dropdown-item">
-                                        {{ __('Wallet Balance') }}: Rp {{ number_format(Auth::user()->wallet->balance, 0, ',', '.') }}
+                                    <div class="dropdown-item d-flex justify-content-between align-items-center">
+                                        <span>{{ __('Wallet Balance') }}: Rp <span id="walletBalance">{{ number_format(Auth::user()->wallet->balance, 0, ',', '.') }}</span></span>
+                                        <button id="topupButton" class="btn btn-sm btn-primary ms-2">+</button>
                                     </div>
                                     <a class="dropdown-item" href="{{ route('users.show', Auth::user()) }}">
                                         {{ __('Profile') }}
@@ -107,6 +108,32 @@
         </main>
     </div>
     @stack('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#topupButton').click(function() {
+            $.ajax({
+                url: '{{ route("wallet.topup") }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    amount: 100
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#walletBalance').text(response.newBalance);
+                        alert('Topup successful!');
+                    } else {
+                        alert('Topup failed. Please try again.');
+                    }
+                },
+                error: function() {
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>
 

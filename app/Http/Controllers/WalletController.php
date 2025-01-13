@@ -16,15 +16,16 @@ class WalletController extends Controller
 
     public function topup(Request $request)
     {
-        $validatedData = $request->validate([
-            'amount' => 'required|numeric|min:1',
-        ]);
+        $amount = $request->input('amount', 100);
 
         $wallet = Auth::user()->wallet;
-        $wallet->balance += $validatedData['amount'];
+        $wallet->balance += $amount;
         $wallet->save();
 
-        return redirect()->back()->with('success', __('Wallet topped up successfully.'));
+        return response()->json([
+            'success' => true,
+            'newBalance' => number_format($wallet->balance, 0, ',', '.')
+        ]);
     }
 }
 
