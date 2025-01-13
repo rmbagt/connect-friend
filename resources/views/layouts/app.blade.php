@@ -35,6 +35,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('friendships.index') }}">{{ __('Friends') }}</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('messages.index') }}">{{ __('Messages') }}</a>
+                            </li>
                         @endauth
                     </ul>
 
@@ -94,4 +97,3 @@
     </div>
 </body>
 </html>
-

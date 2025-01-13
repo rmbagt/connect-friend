@@ -1,66 +1,83 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Friends') }}</div>
+            <div class="card shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h2 class="mb-0 h5">{{ __('Friends') }}</h2>
+                </div>
 
                 <div class="card-body">
-                    <h3>{{ __('Your Friends') }}</h3>
-                    @if($friends->count() > 0)
-                        <ul class="list-group">
-                            @foreach($friends as $friend)
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        @if($friend->avatar)
-                                            <img src="{{ asset('storage/'.$friend->avatar) }}" alt="{{ $friend->name }}" class="rounded-circle me-2" width="32" height="32">
-                                        @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($friend->name) }}&color=7F9CF5&background=EBF4FF" alt="{{ $friend->name }}" class="rounded-circle me-2" width="32" height="32">
-                                        @endif
-                                        {{ $friend->name }}
+                    <!-- Friends Section -->
+                    <div class="mb-5">
+                        <h3 class="h5 mb-4">{{ __('Your Friends') }}</h3>
+                        @if($friends->count() > 0)
+                            <div class="list-group">
+                                @foreach($friends as $friend)
+                                    <div class="list-group-item border-start-0 border-end-0 d-flex justify-content-between align-items-center py-3">
+                                        <div class="d-flex align-items-center">
+                                            @if($friend->avatar)
+                                                <img src="{{ asset('storage/'.$friend->avatar) }}" alt="{{ $friend->name }}" 
+                                                    class="rounded-circle me-3" width="40" height="40">
+                                            @else
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($friend->name) }}&color=7F9CF5&background=EBF4FF" 
+                                                    alt="{{ $friend->name }}" class="rounded-circle me-3" width="40" height="40">
+                                            @endif
+                                            <span class="fw-medium">{{ $friend->name }}</span>
+                                        </div>
+                                        <form action="{{ route('friendships.destroy', $friend->pivot->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-user-minus me-1"></i>{{ __('Remove') }}
+                                            </button>
+                                        </form>
                                     </div>
-                                    <form action="{{ route('friendships.destroy', $friend->pivot->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">{{ __('Remove') }}</button>
-                                    </form>
-                                </li>
-                            @endforeach
-                        </ul>
-                        {{ $friends->links() }}
-                    @else
-                        <p>{{ __('You have no friends yet.') }}</p>
-                    @endif
+                                @endforeach
+                            </div>
+                            <div class="mt-4">
+                                {{ $friends->links() }}
+                            </div>
+                        @else
+                            <div class="alert alert-info">{{ __('You have no friends yet.') }}</div>
+                        @endif
+                    </div>
 
-                    <h3 class="mt-4">{{ __('Mutual Wishlist Users') }}</h3>
-                    @if($mutualWishlistUsers->count() > 0)
-                        <ul class="list-group">
-                            @foreach($mutualWishlistUsers as $mutualUser)
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        @if($mutualUser->avatar)
-                                            <img src="{{ asset('storage/'.$mutualUser->avatar) }}" alt="{{ $mutualUser->name }}" class="rounded-circle me-2" width="32" height="32">
-                                        @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($mutualUser->name) }}&color=7F9CF5&background=EBF4FF" alt="{{ $mutualUser->name }}" class="rounded-circle me-2" width="32" height="32">
-                                        @endif
-                                        {{ $mutualUser->name }}
+                    <!-- Mutual Wishlist Users Section -->
+                    <div>
+                        <h3 class="h5 mb-4">{{ __('Mutual Wishlist Users') }}</h3>
+                        @if($mutualWishlistUsers->count() > 0)
+                            <div class="list-group">
+                                @foreach($mutualWishlistUsers as $mutualUser)
+                                    <div class="list-group-item border-start-0 border-end-0 d-flex justify-content-between align-items-center py-3">
+                                        <div class="d-flex align-items-center">
+                                            @if($mutualUser->avatar)
+                                                <img src="{{ asset('storage/'.$mutualUser->avatar) }}" alt="{{ $mutualUser->name }}" 
+                                                    class="rounded-circle me-3" width="40" height="40">
+                                            @else
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($mutualUser->name) }}&color=7F9CF5&background=EBF4FF" 
+                                                    alt="{{ $mutualUser->name }}" class="rounded-circle me-3" width="40" height="40">
+                                            @endif
+                                            <span class="fw-medium">{{ $mutualUser->name }}</span>
+                                        </div>
+                                        <form action="{{ route('friendships.store', $mutualUser) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-success btn-sm">
+                                                <i class="fas fa-user-plus me-1"></i>{{ __('Add Friend') }}
+                                            </button>
+                                        </form>
                                     </div>
-                                    <form action="{{ route('friendships.store', $mutualUser) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success btn-sm">{{ __('Add Friend') }}</button>
-                                    </form>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <p>{{ __('You have no mutual wishlist users.') }}</p>
-                    @endif
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="alert alert-info">{{ __('You have no mutual wishlist users.') }}</div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
-

@@ -12,7 +12,8 @@ class MessageController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $conversations = $user->friends->map(function ($friend) use ($user) {
+        $friends = $user->friends;
+        $conversations = $friends->map(function ($friend) use ($user) {
             $latestMessage = Message::where(function ($query) use ($user, $friend) {
                 $query->where('sender_id', $user->id)->where('receiver_id', $friend->id);
             })->orWhere(function ($query) use ($user, $friend) {
