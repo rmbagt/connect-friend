@@ -29,6 +29,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'gender' => fake()->randomElement(['male', 'female']),
+            'bio' => fake()->sentence(),
             'instagram_username' => 'https://www.instagram.com/' . fake()->userName(),
             'mobile_number' => fake()->phoneNumber(),
             'registration_price' => 100000 + fake()->randomNumber(4),

@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
     {
         $hobbies = Hobby::all();
 
-        User::factory()->count(5)->create()->each(function ($user) use ($hobbies) {
+        User::factory()->count(3)->create()->each(function ($user) use ($hobbies) {
             $user->hobbies()->attach(
                 $hobbies->random(rand(3, 5))->pluck('id')->toArray()
             );
@@ -27,6 +27,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'gender' => 'male',
+            'bio' => 'A person who loves to code and play games.',
             'instagram_username' => 'https://www.instagram.com/reynaldo_marchellba',
             'mobile_number' => '085263728174',
             'registration_price' => 100000 + rand(0, 25000),

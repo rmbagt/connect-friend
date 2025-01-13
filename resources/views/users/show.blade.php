@@ -11,17 +11,10 @@
 
                 <div class="card-body p-4">
                     <div class="text-center mb-4">
-                        @if($user->avatar)
-                            <img src="{{ asset('storage/'.$user->avatar) }}" 
-                                 alt="{{ $user->name }}" 
-                                 class="rounded-circle shadow-sm img-thumbnail"
-                                 width="150" height="150">
-                        @else
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=7F9CF5&background=EBF4FF"
-                                 alt="{{ $user->name }}" 
-                                 class="rounded-circle shadow-sm img-thumbnail"
-                                 width="150" height="150">
-                        @endif
+                        <img src="{{ $user->getAvatarUrl() }}" 
+                             alt="{{ $user->name }}" 
+                             class="rounded-circle shadow-sm img-thumbnail"
+                             width="150" height="150">
                         <h2 class="mt-3 mb-1">{{ $user->name }}</h2>
                     </div>
 
@@ -102,3 +95,4 @@
     }
 </style>
 @endpush
+

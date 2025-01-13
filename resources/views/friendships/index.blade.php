@@ -18,13 +18,8 @@
                                 @foreach($friends as $friend)
                                     <div class="list-group-item border-start-0 border-end-0 d-flex justify-content-between align-items-center py-3">
                                         <div class="d-flex align-items-center">
-                                            @if($friend->avatar)
-                                                <img src="{{ asset('storage/'.$friend->avatar) }}" alt="{{ $friend->name }}" 
+                                            <img src="{{ $friend->getAvatarUrl() }}" alt="{{ $friend->name }}" 
                                                     class="rounded-circle me-3" width="40" height="40">
-                                            @else
-                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($friend->name) }}&color=7F9CF5&background=EBF4FF" 
-                                                    alt="{{ $friend->name }}" class="rounded-circle me-3" width="40" height="40">
-                                            @endif
                                             <span class="fw-medium">{{ $friend->name }}</span>
                                         </div>
                                         <form action="{{ route('friendships.destroy', $friend->pivot->id) }}" method="POST">
@@ -53,13 +48,8 @@
                                 @foreach($mutualWishlistUsers as $mutualUser)
                                     <div class="list-group-item border-start-0 border-end-0 d-flex justify-content-between align-items-center py-3">
                                         <div class="d-flex align-items-center">
-                                            @if($mutualUser->avatar)
-                                                <img src="{{ asset('storage/'.$mutualUser->avatar) }}" alt="{{ $mutualUser->name }}" 
+                                            <img src="{{ $mutualUser->getAvatarUrl() }}" alt="{{ $mutualUser->name }}" 
                                                     class="rounded-circle me-3" width="40" height="40">
-                                            @else
-                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($mutualUser->name) }}&color=7F9CF5&background=EBF4FF" 
-                                                    alt="{{ $mutualUser->name }}" class="rounded-circle me-3" width="40" height="40">
-                                            @endif
                                             <span class="fw-medium">{{ $mutualUser->name }}</span>
                                         </div>
                                         <form action="{{ route('friendships.store', $mutualUser) }}" method="POST">
@@ -81,3 +71,4 @@
     </div>
 </div>
 @endsection
+

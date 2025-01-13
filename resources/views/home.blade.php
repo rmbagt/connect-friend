@@ -58,7 +58,7 @@
         @foreach($users as $user)
             <div class="col-sm-6 col-lg-4">
                 <div class="card h-100 shadow-sm hover-shadow transition-all">
-                    <img src="{{ $user->avatar ? asset('storage/'.$user->avatar) : 'https://ui-avatars.com/api/?name='.urlencode($user->name).'&color=7F9CF5&background=EBF4FF' }}" 
+                    <img src="{{ $user->getAvatarUrl() }}" 
                          class="card-img-top object-fit-cover" style="height: 200px" 
                          alt="{{ $user->name }}">
                     <div class="card-body">

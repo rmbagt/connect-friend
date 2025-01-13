@@ -106,5 +106,22 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Avatar::class, 'user_avatars')->withTimestamps();
     }
+
+    public function getAvatarUrl()
+    {
+        $avatarUrls = [
+            'https://i.pinimg.com/736x/5d/99/50/5d9950c70003b26a8ca28e6158c0b4f2.jpg',
+            'https://i.pinimg.com/736x/fc/eb/41/fceb41ed28b6e8abd4018a75028c76b3.jpg',
+            'https://i.pinimg.com/736x/50/24/e2/5024e20dadeb39798d512419e9985afe.jpg',
+            'https://i.pinimg.com/736x/44/7b/01/447b01def7a69239c6ee5aae7bdf6c5e.jpg',
+            'https://i.pinimg.com/736x/bb/ab/cc/bbabccb74b3f3825e0faa3af97fa296f.jpg',
+        ];
+
+        if ($this->avatar && in_array($this->avatar, $avatarUrls)) {
+            return $this->avatar;
+        }
+
+        return $this->avatar ? asset('storage/' . $this->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=7F9CF5&background=EBF4FF';
+    }
 }
 
