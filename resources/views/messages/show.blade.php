@@ -81,3 +81,21 @@
 }
 </style>
 @endsection
+
+@push('scripts')
+<script>
+function scrollToBottom() {
+    const chatContainer = document.querySelector('.chat-container');
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Scroll to bottom when page loads
+document.addEventListener('DOMContentLoaded', scrollToBottom);
+
+// Scroll to bottom after sending a message
+document.querySelector('form').addEventListener('submit', function() {
+    setTimeout(scrollToBottom, 50);
+});
+</script>
+@endpush
+

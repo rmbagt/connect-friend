@@ -17,7 +17,7 @@
                                  class="rounded-circle shadow-sm img-thumbnail"
                                  width="150" height="150">
                         @else
-                            <img src="https://via.placeholder.com/150" 
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=7F9CF5&background=EBF4FF"
                                  alt="{{ $user->name }}" 
                                  class="rounded-circle shadow-sm img-thumbnail"
                                  width="150" height="150">

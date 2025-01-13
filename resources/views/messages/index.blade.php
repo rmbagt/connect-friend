@@ -15,11 +15,17 @@
                     <a href="{{ route('messages.show', $conversation['friend']) }}" 
                        class="list-group-item list-group-item-action border-start-0 border-end-0 @if(request()->is('messages/' . $conversation['friend']->id)) active @endif">
                         <div class="d-flex align-items-center">
-                            <!-- User Avatar Placeholder -->
-                            <div class="rounded-circle bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center" 
-                                 style="width: 40px; height: 40px; margin-right: 15px;">
-                                <span class="text-secondary">{{ substr($conversation['friend']->name, 0, 1) }}</span>
-                            </div>
+                            @if($conversation['friend']->avatar)
+                                <img src="{{ asset('storage/'.$conversation['friend']->avatar) }}" 
+                                     alt="{{ $conversation['friend']->name }}" 
+                                     class="rounded-circle"
+                                     style="width: 40px; height: 40px; margin-right: 15px; object-fit: cover;">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($conversation['friend']->name) }}&color=7F9CF5&background=EBF4FF"
+                                     alt="{{ $conversation['friend']->name }}" 
+                                     class="rounded-circle"
+                                     style="width: 40px; height: 40px; margin-right: 15px; object-fit: cover;">
+                            @endif
                             <div class="flex-grow-1 overflow-hidden">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h6 class="mb-0 text-truncate">{{ $conversation['friend']->name }}</h6>
