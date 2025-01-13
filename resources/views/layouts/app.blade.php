@@ -57,6 +57,17 @@
                                 </li>
                             @endif
                         @else
+                            <li class="nav-item d-flex align-items-center mx-2">
+                                <a class="nav-link position-relative d-flex align-items-center justify-content-center" href="{{ route('notifications.index') }}">
+                                    <i class="fas fa-bell fa-lg"></i>
+                                    @if(Auth::user()->notifications()->whereNull('read_at')->count() > 0)
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {{ Auth::user()->notifications()->whereNull('read_at')->count() }}
+                                            <span class="visually-hidden">unread notifications</span>
+                                        </span>
+                                    @endif
+                                </a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     @if(Auth::user()->avatar)
@@ -95,5 +106,7 @@
             @yield('content')
         </main>
     </div>
+    @stack('scripts')
 </body>
 </html>
+

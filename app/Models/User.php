@@ -95,5 +95,10 @@ class User extends Authenticatable
         return $this->friends()->where('friend_id', $user->id)->exists() ||
                $user->friends()->where('friend_id', $this->id)->exists();
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
 }
 

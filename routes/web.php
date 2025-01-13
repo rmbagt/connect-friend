@@ -8,6 +8,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,5 +57,11 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::get('/payment', [PaymentController::class, 'show'])->name('payment.show');
     Route::post('/payment', [PaymentController::class, 'process'])->name('payment.process');
     Route::post('/payment/overpayment', [PaymentController::class, 'handleOverpayment'])->name('payment.handle-overpayment');
+
+    // Notification routes
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    Route::get('/notifications/{notification}/view', [NotificationController::class, 'viewAndMarkAsRead'])->name('notifications.viewAndMarkAsRead');
 });
 

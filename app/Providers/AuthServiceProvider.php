@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 use App\Policies\UserPolicy;
 use App\Policies\MessagePolicy; // Added import
+use App\Models\Notification;
+use App\Policies\NotificationPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         User::class => UserPolicy::class,
+        Notification::class => NotificationPolicy::class,
     ];
 
     /**

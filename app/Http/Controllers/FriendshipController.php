@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Friendship;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -51,6 +52,14 @@ class FriendshipController extends Controller
             // Remove from each other's wishlists
             Auth::user()->wishlist()->detach($user->id);
             $user->wishlist()->detach(Auth::id());
+
+            // Create notification for the other user
+            Notification::create([
+                'user_id' => $user->id,
+                'content' => Auth::user()->name . ' has added you as a friend.',
+                'type' => 'friend_request_accepted',
+                'data' => ['user_id' => Auth::id()],
+            ]);
         });
 
         return redirect()->back()->with('success', __('Friend added successfully.'));
