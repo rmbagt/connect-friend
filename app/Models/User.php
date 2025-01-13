@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Avatar;
 
 class User extends Authenticatable
 {
@@ -99,6 +100,11 @@ class User extends Authenticatable
     public function notifications()
     {
         return $this->hasMany(Notification::class);
+    }
+
+    public function avatars()
+    {
+        return $this->belongsToMany(Avatar::class, 'user_avatars')->withTimestamps();
     }
 }
 

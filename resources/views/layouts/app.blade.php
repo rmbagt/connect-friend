@@ -38,6 +38,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('messages.index') }}">{{ __('Messages') }}</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('avatars.index') }}">{{ __('Buy Avatars') }}</a>
+                            </li>
                         @endauth
                     </ul>
 

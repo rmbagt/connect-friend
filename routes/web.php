@@ -9,6 +9,7 @@ use App\Http\Controllers\WalletController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AvatarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,5 +64,10 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::post('/notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
     Route::get('/notifications/{notification}/view', [NotificationController::class, 'viewAndMarkAsRead'])->name('notifications.viewAndMarkAsRead');
+
+    // Avatar routes
+    Route::get('/avatars', [AvatarController::class, 'index'])->name('avatars.index');
+    Route::post('/avatars/{avatar}/purchase', [AvatarController::class, 'purchase'])->name('avatars.purchase');
+    Route::post('/avatars/{avatar}/set-profile-picture', [AvatarController::class, 'setAsProfilePicture'])->name('avatars.set-profile-picture');
 });
 
