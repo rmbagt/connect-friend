@@ -44,7 +44,7 @@ ConnectFriend is a social networking platform designed to help users connect wit
 1. **Clone Repository:**
 
 ```bash
-git clone https://github.com/reynaldomarchell/FinalASGWebProg-2602138214-ReynaldoMarchellBagasAdji.git
+git clone https://github.com/reynaldomarchell/connect-friend.git
 ```
 
 2. **Install PHP Dependencies:**
