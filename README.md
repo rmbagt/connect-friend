@@ -1,6 +1,6 @@
 # ConnectFriend 👥
 
-![ConnectFriend Logo](/public/assets/connectfriend.svg)
+![ConnectFriend Logo](/public/assets/connectfriend.png)
 
 ConnectFriend is a social networking platform designed to help users connect with like-minded individuals based on shared hobbies and interests. It provides a fun and interactive way to make new friends and expand your social circle.
 
@@ -44,7 +44,7 @@ ConnectFriend is a social networking platform designed to help users connect wit
 1. **Clone Repository:**
 
 ```bash
-git clone https://github.com/reynaldomarchell/connect-friend.git
+git clone https://github.com/rmbagt/connect-friend.git
 ```
 
 2. **Install PHP Dependencies:**
@@ -147,6 +147,6 @@ DB_PASSWORD=your_database_password
 
 ## Contributors
 
-<a href="https://github.com/reynaldomarchell/FinalASGWebProg-2602138214-ReynaldoMarchellBagasAdji/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=reynaldomarchell/FinalASGWebProg-2602138214-ReynaldoMarchellBagasAdji"/>
+<a href="https://github.com/rmbagt/connect-friend/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=rmbagt/connect-friend"/>
 </a>
